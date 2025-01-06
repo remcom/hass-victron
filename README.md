@@ -2,6 +2,25 @@
 
 This Repo is a fork of https://github.com/sfstar/hass-victron and is a continuation of that project
 
+# Migration guide to switch to this repo
+Follow these steps to switch to the new repository. All steps are performed in HACS, and there is no need to remove the Victron integration from the Home Assistant Devices & Services page.
+
+**Important**: Make a backup before you begin. It’s unlikely to be needed, but better safe than sorry.
+
+1. **Ensure you first upgrade to the latest version of Home Assistant (2025.1.0 or higher).** After this upgrade, the Victron integration will stop working, but that’s fine for now.
+2. **Go to HACS and remove the “Victron GX Modbus TCP” integration.**\
+When you attempt this, a message like the following may appear:\
+“The Victron GX Modbus TCP integration is configured or ignored. You need to delete the configuration for it before removing it from HACS.”\
+You can safely click **Ignore** to proceed.
+3. **Add the new repository using this link:**
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=remcom&repository=hass-victron&category=integration)
+4.	**Search for “Victron” in HACS.**\
+You will find two Victron integrations. Select the new one. You can verify it by checking that the documentation starts with:\
+“This Repo is a fork of https://github.com/sfstar/hass-victron and is a continuation of that project.”
+5.	**Download the integration.**
+6.	**Restart your Home Assistant instance.**\
+After restarting, the Victron integration should work as expected.
+
 # Victron GX modbusTCP integration
 This integration scans for all available registers of a provided GX device.
 It then uses the defined register ledgers to create entities for each and every register that is provided by the GX device.
