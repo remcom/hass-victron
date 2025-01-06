@@ -7,6 +7,14 @@ Follow these steps to switch to the new repository. All steps are performed in H
 
 **Important**: Make a backup before you begin. It’s unlikely to be needed, but better safe than sorry.
 
+**Breaking change**: Users that have a device with modbus id 0 connected should perform a rescan after installing this update.
+This will seperate the modbus device with id 0 into it's seperate dedicated device.
+Unfortunately historical data for the entities, when the device was placed under unit id 100, will not be transfered.
+All other entities and devices should remain unaffected.\
+\
+This fix was already made on the old repo in release v0.3.0 but was never set as latest so nobody had this fix yet
+
+***Steps***
 1. **Ensure you first upgrade to the latest version of Home Assistant (2025.1.0 or higher).** After this upgrade, the Victron integration will stop working, but that’s fine for now.
 2. **Go to HACS and remove the “Victron GX Modbus TCP” integration.**\
 When you attempt this, a message like the following may appear:\
