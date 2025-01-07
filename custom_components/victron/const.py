@@ -1773,6 +1773,11 @@ class evcharger_mode(Enum):
     SCHEDULED = 2
 
 
+class evcharger_position(Enum):
+    AC_OUTPUT = 0
+    AC_INPUT = 1
+
+
 class evcharger_status(Enum):
     DISCONNECTED = 0
     CONNECTED = 1
@@ -1836,7 +1841,7 @@ evcharger_registers = {
         register=3826, dataType=UINT16, entityType=SwitchWriteType()
     ),
     "evcharger_position": RegisterInfo(
-        register=3827, dataType=UINT16, entityType=TextReadEntityType(generic_position)
+        register=3827, dataType=UINT16, entityType=TextReadEntityType(evcharger_position)
     ),
 }
 
