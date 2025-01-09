@@ -1,0 +1,27 @@
+---
+name: Pylint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  pylint:
+    name: pylint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4
+      - name: 🏗 Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: 🏗 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+
+      - name: 🚀 Analysing the code with pylint (Not on all files yet wip)
+        run: pylint custom_components/victron/__init__.py custom_components/victron/base.py
