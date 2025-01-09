@@ -42,12 +42,11 @@ If you are missing a feature or experience any issues please report them in the 
 ## Limitations
 The current state of this integration provides the following limitations regarding it's use:
 - Configuring the integration will be relatively slow if a discovery scan is required.
-- This integration wasn't tested with a three phase system. Although basic functionality should work minor bugs could have gone unnoticed
 
 ## Important Note
 This integration was written an tested with the latest victron firmware running.
-GX version: v3.10 (support validated from v2.92)
-Multiplus version: 492
+GX version: v3.53 (support validated from v2.92)
+Multiplus version: 552
 
 Victron continuously improves upon the modbus implementation by adding new registers.
 Therefore older firmware versions might not expose all registers this integration expects to be present.
@@ -164,6 +163,6 @@ This setting is used in combination with AC current to automatically calcultate 
 # Resources 
 The following links can be helpfull resources:
 - [setting up modbusTCP on the gx device](https://www.victronenergy.com/live/ccgx:modbustcp_faq)
-- [Great UI card for the gx device data](https://github.com/flyrmyr/system-flow-card)
-![image](https://user-images.githubusercontent.com/6717280/236457703-5c9219bd-ad88-487e-80b9-28d51859175e.png)
+- [Great UI card for the gx device data](https://github.com/flixlix/power-flow-card-plus)
+![image](https://user-images.githubusercontent.com/61006057/227771568-78497ecc-e863-46f2-b29e-e15c7c20a154.gif)
 
