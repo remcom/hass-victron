@@ -1,0 +1,8 @@
+[MASTER]
+disable=
+    C0114, # missing-module-docstring, ignore for now
+    C0115, # missing-module-docstring, ignore for now
+    C0116, # missing-function-docstring, ignore for now
+    C0301, # line-too-long, ignore for now
+    C0302, # too-many-lines, ignore for now
+    W0511, # fixme, ignore for now
