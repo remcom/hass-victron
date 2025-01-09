@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import logging
 
 from homeassistant import config_entries
 from homeassistant.components.number import (
@@ -19,10 +20,10 @@ from homeassistant.const import (
     UnitOfElectricCurrent,
 )
 
-
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers import entity
 
 from .coordinator import victronEnergyDeviceUpdateCoordinator
 from .base import VictronWriteBaseEntityDescription
@@ -39,10 +40,6 @@ from .const import (
     CONF_AC_SYSTEM_VOLTAGE,
     CONF_AC_CURRENT_LIMIT,
 )
-
-from homeassistant.helpers import entity
-
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,11 +63,8 @@ async def async_setup_entry(
             for name in registerLedger:
                 for register_name, registerInfo in register_info_dict[name].items():
                     _LOGGER.debug(
-                        "unit == "
-                        + str(slave)
-                        + " registerLedger == "
-                        + str(registerLedger)
-                        + " registerInfo "
+                        "unit == $s register_ledger == %s registerInfo",
+                        {str(slave), str(registerLedger)},
                     )
 
                     if isinstance(registerInfo.entityType, SliderWriteType):
@@ -98,7 +92,7 @@ async def async_setup_entry(
                             scale=registerInfo.scale,
                             native_step=registerInfo.step,
                         )
-                        _LOGGER.debug("composed description == " + str(descriptions))
+                        _LOGGER.debug("composed description == %s", {str(description)})
                         descriptions.append(description)
 
     entities = []
@@ -208,7 +202,8 @@ class VictronEntityDescription(
     VictronNumberMixin,
     VictronNumberStep,
 ):
-    # Overwrite base entitydescription property to resolve automatic property ordering issues when a mix of non-default and default properties are used
+    # Overwrite base entitydescription property to resolve automatic property
+    # ordering issues when a mix of non-default and default properties are used
     key: str | None = None
     """Describes victron number entity."""
 
