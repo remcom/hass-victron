@@ -13,7 +13,7 @@ import pymodbus
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 
-if pymodbus.__version__ == "3.7.4":
+if "3.7.0" <= pymodbus.__version__ <= "3.7.4":
     from pymodbus.pdu.register_read_message import ReadHoldingRegistersResponse
 else:
     from pymodbus.pdu.register_message import ReadHoldingRegistersResponse
