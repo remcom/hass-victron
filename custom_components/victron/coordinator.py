@@ -9,9 +9,14 @@ from collections import OrderedDict
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
+import pymodbus
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
-from pymodbus.pdu.register_read_message import ReadHoldingRegistersResponse
+
+if pymodbus.__version__ == "3.7.4":
+    from pymodbus.pdu.register_read_message import ReadHoldingRegistersResponse
+else:
+    from pymodbus.pdu.register_message import ReadHoldingRegistersResponse
 
 from datetime import timedelta
 
