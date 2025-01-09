@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from homeassistant.core import HomeAssistant, HassJob
-
 from dataclasses import dataclass
+import logging
+
+from homeassistant.core import HomeAssistant, HassJob
 
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -23,7 +24,6 @@ from .base import VictronWriteBaseEntityDescription
 from .coordinator import victronEnergyDeviceUpdateCoordinator
 from .const import DOMAIN, CONF_ADVANCED_OPTIONS, register_info_dict, ButtonWriteType
 
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -45,11 +45,8 @@ async def async_setup_entry(
         for name in registerLedger:
             for register_name, registerInfo in register_info_dict[name].items():
                 _LOGGER.debug(
-                    "unit == "
-                    + str(slave)
-                    + " registerLedger == "
-                    + str(registerLedger)
-                    + " registerInfo "
+                    "unit == $s register_ledger == %s registerInfo",
+                    {str(slave), str(registerLedger)},
                 )
                 if not config_entry.options[CONF_ADVANCED_OPTIONS]:
                     continue
@@ -62,7 +59,7 @@ async def async_setup_entry(
                         device_class=ButtonDeviceClass.RESTART,
                         address=registerInfo.register,
                     )
-                    _LOGGER.debug("composed description == " + str(description))
+                    _LOGGER.debug("composed description == %s", {str(description)})
                     descriptions.append(description)
 
     entities = []
