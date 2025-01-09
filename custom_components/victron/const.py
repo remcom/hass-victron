@@ -1772,9 +1772,11 @@ class EvChargerMode(Enum):
     AUTO = 1
     SCHEDULED = 2
 
+
 class EvChargerPosition(Enum):
     AC_OUTPUT = 0
     AC_INPUT = 1
+
 
 class EvChargerStatus(Enum):
     DISCONNECTED = 0
