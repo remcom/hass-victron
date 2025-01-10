@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing import cast
 
-from homeassistant.core import HomeAssistant, HassJob
-
-
+import logging
 from dataclasses import dataclass
+
+from homeassistant.core import HomeAssistant, HassJob
 
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -25,7 +25,6 @@ from .coordinator import victronEnergyDeviceUpdateCoordinator
 from .base import VictronBaseEntityDescription
 from .const import DOMAIN, register_info_dict, BoolReadEntityType
 
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -45,24 +44,21 @@ async def async_setup_entry(
     descriptions = []
     # TODO cleanup
     register_set = victron_coordinator.processed_data()["register_set"]
-    for slave, registerLedger in register_set.items():
-        for name in registerLedger:
-            for register_name, registerInfo in register_info_dict[name].items():
+    for slave, register_ledger in register_set.items():
+        for name in register_ledger:
+            for register_name, register_info in register_info_dict[name].items():
                 _LOGGER.debug(
-                    "unit == "
-                    + str(slave)
-                    + " registerLedger == "
-                    + str(registerLedger)
-                    + " registerInfo "
+                    "unit == $s register_ledger == %s registerInfo",
+                    {str(slave), str(register_ledger)},
                 )
 
-                if isinstance(registerInfo.entityType, BoolReadEntityType):
+                if isinstance(register_info.entityType, BoolReadEntityType):
                     description = VictronEntityDescription(
                         key=register_name,
                         name=register_name.replace("_", " "),
                         slave=slave,
                     )
-                    _LOGGER.debug("composed description == " + str(description))
+                    _LOGGER.debug("composed description == %s", {str(description)})
                     descriptions.append(description)
 
     entities = []
@@ -127,6 +123,6 @@ class VictronBinarySensor(CoordinatorEntity, BinarySensorEntity):
         return entity.DeviceInfo(
             identifiers={(DOMAIN, self.unique_id.split("_")[0])},
             name=self.unique_id.split("_")[1],
-            model=self.unique_id.split("_")[0],
+            model=self.unique_id.split("_", maxsplit=1)[0],
             manufacturer="victron",
         )

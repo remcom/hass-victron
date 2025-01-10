@@ -5,6 +5,8 @@ from __future__ import annotations
 from enum import Enum
 
 from dataclasses import dataclass
+import logging
+from datetime import timedelta
 
 from homeassistant.components.select import (
     SelectEntity,
@@ -14,20 +16,15 @@ from homeassistant.components.select import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, HassJob
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
-from .coordinator import victronEnergyDeviceUpdateCoordinator
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers import entity
 
-from .const import DOMAIN, register_info_dict, SelectWriteType, CONF_ADVANCED_OPTIONS
-from .base import VictronWriteBaseEntityDescription
-
-
-from datetime import timedelta
 from homeassistant.util import utcnow
 from homeassistant.helpers import event
 
-import logging
+from .coordinator import victronEnergyDeviceUpdateCoordinator
+from .const import DOMAIN, register_info_dict, SelectWriteType, CONF_ADVANCED_OPTIONS
+from .base import VictronWriteBaseEntityDescription
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -51,11 +48,8 @@ async def async_setup_entry(
                 for register_name, registerInfo in register_info_dict[name].items():
                     if isinstance(registerInfo.entityType, SelectWriteType):
                         _LOGGER.debug(
-                            "unit == "
-                            + str(slave)
-                            + " registerLedger == "
-                            + str(registerLedger)
-                            + " registerInfo "
+                            "unit == $s register_ledger == %s registerInfo",
+                            {str(slave), str(registerLedger)},
                         )
 
                         description = VictronEntityDescription(
@@ -67,7 +61,7 @@ async def async_setup_entry(
                         )
 
                         descriptions.append(description)
-                        _LOGGER.debug("composed description == " + str(description))
+                        _LOGGER.debug("composed description == %s", {str(description)})
 
     entities = []
     entity = {}

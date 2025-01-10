@@ -16,17 +16,6 @@ from homeassistant.components.sensor import (
     DOMAIN as SENSOR_DOMAIN,
 )
 
-from .coordinator import victronEnergyDeviceUpdateCoordinator
-from .base import VictronBaseEntityDescription
-from .const import (
-    DOMAIN,
-    register_info_dict,
-    CONF_ADVANCED_OPTIONS,
-    ReadEntityType,
-    TextReadEntityType,
-    BoolReadEntityType,
-)
-
 from homeassistant.const import (
     PERCENTAGE,
     UnitOfEnergy,
@@ -41,6 +30,16 @@ from homeassistant.const import (
     UnitOfPressure,
 )
 
+from .coordinator import victronEnergyDeviceUpdateCoordinator
+from .base import VictronBaseEntityDescription
+from .const import (
+    DOMAIN,
+    register_info_dict,
+    CONF_ADVANCED_OPTIONS,
+    ReadEntityType,
+    TextReadEntityType,
+    BoolReadEntityType,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -64,11 +63,8 @@ async def async_setup_entry(
         for name in registerLedger:
             for register_name, registerInfo in register_info_dict[name].items():
                 _LOGGER.debug(
-                    "unit == "
-                    + str(slave)
-                    + " registerLedger == "
-                    + str(registerLedger)
-                    + " registerInfo "
+                    "unit == $s register_ledger == %s registerInfo",
+                    {str(slave), str(registerLedger)},
                 )
                 if config_entry.options[CONF_ADVANCED_OPTIONS]:
                     if not isinstance(
@@ -89,7 +85,7 @@ async def async_setup_entry(
                     if isinstance(registerInfo.entityType, TextReadEntityType)
                     else None,
                 )
-                _LOGGER.debug("composed description == " + str(description))
+                _LOGGER.debug("composed description == %s", {str(description)})
 
                 descriptions.append(description)
 

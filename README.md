@@ -7,6 +7,14 @@ Follow these steps to switch to the new repository. All steps are performed in H
 
 **Important**: Make a backup before you begin. It’s unlikely to be needed, but better safe than sorry.
 
+**Breaking change**: Users that have a device with modbus id 0 connected should perform a rescan after installing this update.
+This will seperate the modbus device with id 0 into it's seperate dedicated device.
+Unfortunately historical data for the entities, when the device was placed under unit id 100, will not be transfered.
+All other entities and devices should remain unaffected.\
+\
+This fix was already made on the old repo in release v0.3.0 but was never set as latest so nobody had this fix yet
+
+***Steps***
 1. **Ensure you first upgrade to the latest version of Home Assistant (2025.1.0 or higher).** After this upgrade, the Victron integration will stop working, but that’s fine for now.
 2. **Go to HACS and remove the “Victron GX Modbus TCP” integration.**\
 When you attempt this, a message like the following may appear:\
@@ -34,12 +42,11 @@ If you are missing a feature or experience any issues please report them in the 
 ## Limitations
 The current state of this integration provides the following limitations regarding it's use:
 - Configuring the integration will be relatively slow if a discovery scan is required.
-- This integration wasn't tested with a three phase system. Although basic functionality should work minor bugs could have gone unnoticed
 
 ## Important Note
 This integration was written an tested with the latest victron firmware running.
-GX version: v3.10 (support validated from v2.92)
-Multiplus version: 492
+GX version: v3.53 (support validated from v2.92)
+Multiplus version: 552
 
 Victron continuously improves upon the modbus implementation by adding new registers.
 Therefore older firmware versions might not expose all registers this integration expects to be present.
@@ -156,6 +163,6 @@ This setting is used in combination with AC current to automatically calcultate 
 # Resources 
 The following links can be helpfull resources:
 - [setting up modbusTCP on the gx device](https://www.victronenergy.com/live/ccgx:modbustcp_faq)
-- [Great UI card for the gx device data](https://github.com/flyrmyr/system-flow-card)
-![image](https://user-images.githubusercontent.com/6717280/236457703-5c9219bd-ad88-487e-80b9-28d51859175e.png)
+- [Great UI card for the gx device data](https://github.com/flixlix/power-flow-card-plus)
+![image](https://user-images.githubusercontent.com/61006057/227771568-78497ecc-e863-46f2-b29e-e15c7c20a154.gif)
 
