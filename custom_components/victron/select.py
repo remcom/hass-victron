@@ -48,8 +48,9 @@ async def async_setup_entry(
                 for register_name, registerInfo in register_info_dict[name].items():
                     if isinstance(registerInfo.entityType, SelectWriteType):
                         _LOGGER.debug(
-                            "unit == $s register_ledger == %s registerInfo",
-                            {str(slave), str(registerLedger)},
+                            "unit == %s register_ledger == %s registerInfo",
+                            str(slave),
+                            str(registerLedger),
                         )
 
                         description = VictronEntityDescription(

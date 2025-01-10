@@ -45,8 +45,9 @@ async def async_setup_entry(
         for name in registerLedger:
             for register_name, registerInfo in register_info_dict[name].items():
                 _LOGGER.debug(
-                    "unit == $s register_ledger == %s registerInfo",
-                    {str(slave), str(registerLedger)},
+                    "unit == %s register_ledger == %s registerInfo",
+                    str(slave),
+                    str(registerLedger),
                 )
                 if not config_entry.options[CONF_ADVANCED_OPTIONS]:
                     continue

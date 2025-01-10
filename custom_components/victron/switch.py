@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, cast
 
 from dataclasses import dataclass
+import logging
 
 from homeassistant.components.switch import (
     SwitchEntity,
@@ -15,15 +16,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, HassJob
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .coordinator import victronEnergyDeviceUpdateCoordinator
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers import entity
 
+from .coordinator import victronEnergyDeviceUpdateCoordinator
+
+
 from .const import DOMAIN, register_info_dict, SwitchWriteType, CONF_ADVANCED_OPTIONS
 from .base import VictronWriteBaseEntityDescription
-
-
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -42,26 +42,24 @@ async def async_setup_entry(
     # TODO cleanup
     if config_entry.options[CONF_ADVANCED_OPTIONS]:
         register_set = victron_coordinator.processed_data()["register_set"]
-        for slave, registerLedger in register_set.items():
-            for name in registerLedger:
-                for register_name, registerInfo in register_info_dict[name].items():
+        for slave, register_ledger in register_set.items():
+            for name in register_ledger:
+                for register_name, register_info in register_info_dict[name].items():
                     _LOGGER.debug(
-                        "unit == "
-                        + str(slave)
-                        + " registerLedger == "
-                        + str(registerLedger)
-                        + " registerInfo "
+                        "unit == %s registerLedger == %s register_info",
+                        str(slave),
+                        str(register_ledger),
                     )
 
-                    if isinstance(registerInfo.entityType, SwitchWriteType):
+                    if isinstance(register_info.entityType, SwitchWriteType):
                         description = VictronEntityDescription(
                             key=register_name,
                             name=register_name.replace("_", " "),
                             slave=slave,
-                            address=registerInfo.register,
+                            address=register_info.register,
                         )
                         descriptions.append(description)
-                        _LOGGER.debug("composed description == " + str(description))
+                        _LOGGER.debug("composed description == %s", str(description))
 
     entities = []
     entity = {}
@@ -139,8 +137,8 @@ class VictronSwitch(CoordinatorEntity, SwitchEntity):
     def device_info(self) -> entity.DeviceInfo:
         """Return the device info."""
         return entity.DeviceInfo(
-            identifiers={(DOMAIN, self.unique_id.split("_")[0])},
+            identifiers={(DOMAIN, self.unique_id.split("_", maxsplit=1)[0])},
             name=self.unique_id.split("_")[1],
-            model=self.unique_id.split("_")[0],
+            model=self.unique_id.split("_", maxsplit=1)[0],
             manufacturer="victron",
         )
