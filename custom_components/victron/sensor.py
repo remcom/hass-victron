@@ -1,45 +1,43 @@
 """Support for Victron energy sensors."""
 
+import logging
 from dataclasses import dataclass
 
-import logging
-
-from homeassistant.helpers import entity
-from homeassistant.core import HomeAssistant, HassJob, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import (
-    SensorEntityDescription,
     SensorDeviceClass,
     SensorEntity,
-    DOMAIN as SENSOR_DOMAIN,
+    SensorEntityDescription,
 )
-
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
-    UnitOfEnergy,
-    UnitOfPower,
-    UnitOfElectricPotential,
     UnitOfElectricCurrent,
+    UnitOfElectricPotential,
+    UnitOfEnergy,
     UnitOfFrequency,
-    UnitOfTime,
-    UnitOfTemperature,
-    UnitOfVolume,
-    UnitOfSpeed,
+    UnitOfPower,
     UnitOfPressure,
+    UnitOfSpeed,
+    UnitOfTemperature,
+    UnitOfTime,
+    UnitOfVolume,
 )
+from homeassistant.core import HassJob, HomeAssistant, callback
+from homeassistant.helpers import entity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .coordinator import victronEnergyDeviceUpdateCoordinator
 from .base import VictronBaseEntityDescription
 from .const import (
-    DOMAIN,
-    register_info_dict,
     CONF_ADVANCED_OPTIONS,
+    DOMAIN,
+    BoolReadEntityType,
     ReadEntityType,
     TextReadEntityType,
-    BoolReadEntityType,
+    register_info_dict,
 )
+from .coordinator import victronEnergyDeviceUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

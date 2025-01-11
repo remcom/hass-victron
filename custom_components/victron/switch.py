@@ -2,28 +2,21 @@
 
 from __future__ import annotations
 
+import logging
+from dataclasses import dataclass
 from typing import Any, cast
 
-from dataclasses import dataclass
-import logging
-
-from homeassistant.components.switch import (
-    SwitchEntity,
-    SwitchEntityDescription,
-    DOMAIN as SWITCH_DOMAIN,
-)
+from homeassistant.components.switch import DOMAIN as SWITCH_DOMAIN
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, HassJob
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.core import HassJob, HomeAssistant
 from homeassistant.helpers import entity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .coordinator import victronEnergyDeviceUpdateCoordinator
-
-
-from .const import DOMAIN, register_info_dict, SwitchWriteType, CONF_ADVANCED_OPTIONS
 from .base import VictronWriteBaseEntityDescription
+from .const import CONF_ADVANCED_OPTIONS, DOMAIN, SwitchWriteType, register_info_dict
+from .coordinator import victronEnergyDeviceUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

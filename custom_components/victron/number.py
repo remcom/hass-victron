@@ -111,13 +111,13 @@ def determine_min_value(
 ) -> int:
     if unit == PERCENTAGE:
         return 0
-    elif unit == UnitOfElectricPotential.VOLT:
+    if unit == UnitOfElectricPotential.VOLT:
         series_type = (
             int(config_entry[CONF_DC_SYSTEM_VOLTAGE]) / 3
         )  # statically based on lifepo4 cells
         min_value = series_type * 2.5  # statically based on lifepo4 cells
         return min_value
-    elif unit == UnitOfPower.WATT:
+    if unit == UnitOfPower.WATT:
         if negative:
             min_value = (
                 (
@@ -134,18 +134,17 @@ def determine_min_value(
             rounded_min = -round(min_value / 100) * 100
             _LOGGER.debug(rounded_min)
             return rounded_min
-        else:
-            return 0
-    elif unit == UnitOfElectricCurrent.AMPERE:
+
+        return 0
+    if unit == UnitOfElectricCurrent.AMPERE:
         if negative:
             if powerType == "AC":
                 return -config_entry[CONF_AC_CURRENT_LIMIT]
-            elif powerType == "DC":
+            if powerType == "DC":
                 return -config_entry[CONF_DC_CURRENT_LIMIT]
-        else:
-            return 0
-    else:
+
         return 0
+    return 0
 
 
 def determine_max_value(
@@ -153,13 +152,13 @@ def determine_max_value(
 ) -> int:
     if unit == PERCENTAGE:
         return 100
-    elif unit == UnitOfElectricPotential.VOLT:
+    if unit == UnitOfElectricPotential.VOLT:
         series_type = (
             int(config_entry[CONF_DC_SYSTEM_VOLTAGE]) / 3
         )  # statically based on lifepo4 cells
         max_value = series_type * 3.65  # statically based on lifepo4 cells
         return max_value
-    elif unit == UnitOfPower.WATT:
+    if unit == UnitOfPower.WATT:
         max_value = (
             (
                 int(config_entry[CONF_AC_SYSTEM_VOLTAGE])
@@ -174,13 +173,13 @@ def determine_max_value(
         )
         rounded_max = round(max_value / 100) * 100
         return rounded_max
-    elif unit == UnitOfElectricCurrent.AMPERE:
+    if unit == UnitOfElectricCurrent.AMPERE:
         if powerType == "AC":
             return config_entry[CONF_AC_CURRENT_LIMIT]
-        elif powerType == "DC":
+        if powerType == "DC":
             return config_entry[CONF_DC_CURRENT_LIMIT]
-    else:
-        return 0
+
+    return 0
 
 
 @dataclass
@@ -278,16 +277,17 @@ class VictronNumber(NumberEntity):
             return None
         if self.description.native_step > 0:
             return self.description.native_step
-        max = self.native_max_value
-        min = self.native_min_value
-        gap = len(list(range(int(min), int(max), 1)))
+
+        gap = len(
+            list(range(int(self.native_min_value), int(self.native_max_value), 1))
+        )
         # TODO optimize gap step selection
         if gap >= 3000:
             return 100
-        elif gap < 3000 and gap > 100:
+        if gap < 3000 and gap > 100:
             return 10
-        else:
-            return 1
+
+        return 1
 
     @property
     def native_min_value(self) -> float:
@@ -306,8 +306,8 @@ class VictronNumber(NumberEntity):
     def device_info(self) -> entity.DeviceInfo:
         """Return the device info."""
         return entity.DeviceInfo(
-            identifiers={(DOMAIN, self.unique_id.split("_")[0])},
+            identifiers={(DOMAIN, self.unique_id.split("_", maxsplit=1)[0])},
             name=self.unique_id.split("_")[1],
-            model=self.unique_id.split("_")[0],
+            model=self.unique_id.split("_", maxsplit=1)[0],
             manufacturer="victron",
         )

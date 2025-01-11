@@ -2,29 +2,23 @@
 
 from __future__ import annotations
 
+import logging
+from dataclasses import dataclass
+from datetime import timedelta
 from enum import Enum
 
-from dataclasses import dataclass
-import logging
-from datetime import timedelta
-
-from homeassistant.components.select import (
-    SelectEntity,
-    SelectEntityDescription,
-    DOMAIN as SELECT_DOMAIN,
-)
+from homeassistant.components.select import DOMAIN as SELECT_DOMAIN
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, HassJob
+from homeassistant.core import HassJob, HomeAssistant
+from homeassistant.helpers import entity, event
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers import entity
-
 from homeassistant.util import utcnow
-from homeassistant.helpers import event
 
-from .coordinator import victronEnergyDeviceUpdateCoordinator
-from .const import DOMAIN, register_info_dict, SelectWriteType, CONF_ADVANCED_OPTIONS
 from .base import VictronWriteBaseEntityDescription
+from .const import CONF_ADVANCED_OPTIONS, DOMAIN, SelectWriteType, register_info_dict
+from .coordinator import victronEnergyDeviceUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

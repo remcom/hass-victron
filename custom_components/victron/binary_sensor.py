@@ -2,29 +2,24 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 import logging
 from dataclasses import dataclass
+from typing import cast
 
-from homeassistant.core import HomeAssistant, HassJob
-
+from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
+from homeassistant.components.binary_sensor import (
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
+)
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HassJob, HomeAssistant
+from homeassistant.helpers import entity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers import entity
-
-from homeassistant.components.binary_sensor import (
-    BinarySensorEntityDescription,
-    BinarySensorEntity,
-    DOMAIN as BINARY_SENSOR_DOMAIN,
-)
-
-from .coordinator import victronEnergyDeviceUpdateCoordinator
 from .base import VictronBaseEntityDescription
-from .const import DOMAIN, register_info_dict, BoolReadEntityType
-
+from .const import DOMAIN, BoolReadEntityType, register_info_dict
+from .coordinator import victronEnergyDeviceUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

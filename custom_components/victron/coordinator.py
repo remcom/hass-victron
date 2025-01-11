@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import logging
-
-from .hub import VictronHub
-
 from collections import OrderedDict
 
+import pymodbus
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-
-import pymodbus
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
+
+from .hub import VictronHub
 
 if "3.7.0" <= pymodbus.__version__ <= "3.7.4":
     from pymodbus.pdu.register_read_message import ReadHoldingRegistersResponse
@@ -22,11 +20,11 @@ from datetime import timedelta
 
 from .const import (
     DOMAIN,
-    UINT16,
-    UINT32,
     INT16,
     INT32,
     STRING,
+    UINT16,
+    UINT32,
     RegisterInfo,
     register_info_dict,
 )

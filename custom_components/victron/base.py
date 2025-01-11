@@ -1,8 +1,8 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.entity import EntityDescription
+from homeassistant.helpers.typing import StateType
 
 
 @dataclass

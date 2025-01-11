@@ -2,28 +2,24 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 
-from homeassistant.core import HomeAssistant, HassJob
-
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers import entity
-
+from homeassistant.components.button import DOMAIN as BUTTON_DOMAIN
 from homeassistant.components.button import (
-    ButtonEntityDescription,
     ButtonDeviceClass,
     ButtonEntity,
-    DOMAIN as BUTTON_DOMAIN,
+    ButtonEntityDescription,
 )
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HassJob, HomeAssistant
+from homeassistant.helpers import entity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .base import VictronWriteBaseEntityDescription
+from .const import CONF_ADVANCED_OPTIONS, DOMAIN, ButtonWriteType, register_info_dict
 from .coordinator import victronEnergyDeviceUpdateCoordinator
-from .const import DOMAIN, CONF_ADVANCED_OPTIONS, register_info_dict, ButtonWriteType
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -120,6 +116,6 @@ class VictronBinarySensor(CoordinatorEntity, ButtonEntity):
         return entity.DeviceInfo(
             identifiers={(DOMAIN, self.unique_id.split("_")[0])},
             name=self.unique_id.split("_")[1],
-            model=self.unique_id.split("_")[0],
+            model=self.unique_id.split("_", maxsplit=1)[0],
             manufacturer="victron",
         )

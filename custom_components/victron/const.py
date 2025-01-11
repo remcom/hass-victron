@@ -1,24 +1,24 @@
 """Constants for the victron integration."""
 
 from enum import Enum
-from homeassistant.const import (
-    PERCENTAGE,
-    UnitOfEnergy,
-    UnitOfElectricPotential,
-    UnitOfElectricCurrent,
-    UnitOfFrequency,
-    UnitOfLength,
-    UnitOfTime,
-    REVOLUTIONS_PER_MINUTE,
-    UnitOfIrradiance,
-    UnitOfPower,
-    UnitOfTemperature,
-    UnitOfVolume,
-    UnitOfSpeed,
-    UnitOfPressure,
-)
 
 from homeassistant.components.sensor import SensorStateClass
+from homeassistant.const import (
+    PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
+    UnitOfElectricCurrent,
+    UnitOfElectricPotential,
+    UnitOfEnergy,
+    UnitOfFrequency,
+    UnitOfIrradiance,
+    UnitOfLength,
+    UnitOfPower,
+    UnitOfPressure,
+    UnitOfSpeed,
+    UnitOfTemperature,
+    UnitOfTime,
+    UnitOfVolume,
+)
 
 
 class DeviceType(Enum):
