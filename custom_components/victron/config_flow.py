@@ -109,14 +109,14 @@ class VictronFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_show_form(
                 step_id="user", data_schema=STEP_USER_DATA_SCHEMA
             )
-        else:
-            if user_input[CONF_ADVANCED_OPTIONS]:
-                _LOGGER.debug("configuring advanced options")
-                self.host = user_input[CONF_HOST]
-                self.port = user_input[CONF_PORT]
-                self.interval = user_input[CONF_INTERVAL]
-                self.advanced_options = user_input[CONF_ADVANCED_OPTIONS]
-                return await self.async_step_advanced()
+
+        if user_input[CONF_ADVANCED_OPTIONS]:
+            _LOGGER.debug("configuring advanced options")
+            self.host = user_input[CONF_HOST]
+            self.port = user_input[CONF_PORT]
+            self.interval = user_input[CONF_INTERVAL]
+            self.advanced_options = user_input[CONF_ADVANCED_OPTIONS]
+            return await self.async_step_advanced()
 
         errors = {}
         already_configured = False
@@ -328,8 +328,8 @@ class VictronOptionFlowHandler(config_entries.OptionsFlow):
             errors = {}
             # move to dedicated function (the write show form) to allow for re-use
             return self.init_write_form(errors)
-        else:
-            return self.async_create_entry(title="", data=combined_config)
+
+        return self.async_create_entry(title="", data=combined_config)
 
     async def async_step_init_write(self, user_input=None):
         """Handle write support and limit settings if requested."""
@@ -394,9 +394,9 @@ class VictronOptionFlowHandler(config_entries.OptionsFlow):
             _LOGGER.debug("advanced options is set")
 
             return self.init_write_form(errors)
-        else:
-            if user_input is None:
-                return self.init_read_form(errors)
+
+        if user_input is None:
+            return self.init_read_form(errors)
 
     def init_read_form(self, errors: dict):
         return self.async_show_form(

@@ -1,10 +1,10 @@
-import threading
 import logging
+import threading
 from collections import OrderedDict
 
 from pymodbus.client import ModbusTcpClient
 
-from .const import UINT32, INT32, STRING, register_info_dict, valid_unit_ids
+from .const import INT32, STRING, UINT32, register_info_dict, valid_unit_ids
 
 _LOGGER = logging.getLogger(__name__)
 
