@@ -2523,7 +2523,6 @@ system_bus_registers = {
 }
 
 valid_unit_ids = [
-    0,
     1,
     2,
     3,
