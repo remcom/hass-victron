@@ -233,6 +233,7 @@ class GenericChargerState(Enum):
     INVERTING = 9
     POWER_ASSIST = 10
     POWER_SUPPLY = 11
+    SUSTAIN = 244
     EXTERNAL_CONTROL = 252
 
 
@@ -709,6 +710,7 @@ class BatteryState(Enum):
     STANDBY = 14
     GOING_TO_RUN = 15
     PRE_CHARGING = 16
+    CONTACTOR_CHECK = 17
 
 
 class BatteryError(Enum):
@@ -1676,6 +1678,7 @@ class DigitalInputType(Enum):
     SMOKE_ALARM = 6
     FIRE_ALARM = 7
     CO2_ALARM = 8
+    GENERATOR_ALARM = 9
 
 
 digitalinput_registers = {
