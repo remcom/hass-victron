@@ -65,11 +65,6 @@ class VictronHub:
         for unit in valid_unit_ids:
             working_registers = []
             for key, register_definition in register_info_dict.items():
-                # VE.CAN device zero is present under unit 100.
-                # This seperates non system / settings entities into the seperate can device
-                if unit == 100 and not key.startswith(("settings", "system")):
-                    continue
-
                 try:
                     address = self.get_first_register_id(register_definition)
                     count = self.calculate_register_count(register_definition)
