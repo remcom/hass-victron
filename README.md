@@ -1,5 +1,22 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
+> # 📦 Repository Archived
+> 
+> This repository has been **archived** and is no longer actively maintained.
+> 
+> ### ❓ Why?
+> 
+> I've decided to archive this project. I've transitioned to using **MQTT** for faster and more reliable updates from **Victron** to **Home Assistant**, which better suits my current setup and development preferences.
+> 
+> ### 🛠️ Need Support or Looking for a Maintained Alternative?
+> 
+> I highly recommend switching to the following actively maintained repository:
+> 👉 [sfstar/hass-victron](https://github.com/sfstar/hass-victron)
+> 
+> 
+> 
+> Thanks to everyone who contributed and used this repo! 🙏
+
 This Repo is a fork of https://github.com/sfstar/hass-victron and is a continuation of that project
 
 # Migration guide to switch to this repo
