@@ -1,45 +1,43 @@
 """Support for Victron energy sensors."""
 
+import logging
 from dataclasses import dataclass
 
-import logging
-
-from homeassistant.helpers import entity
-from homeassistant.core import HomeAssistant, HassJob, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import (
-    SensorEntityDescription,
     SensorDeviceClass,
     SensorEntity,
-    DOMAIN as SENSOR_DOMAIN,
+    SensorEntityDescription,
 )
-
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
-    UnitOfEnergy,
-    UnitOfPower,
-    UnitOfElectricPotential,
     UnitOfElectricCurrent,
+    UnitOfElectricPotential,
+    UnitOfEnergy,
     UnitOfFrequency,
-    UnitOfTime,
-    UnitOfTemperature,
-    UnitOfVolume,
-    UnitOfSpeed,
+    UnitOfPower,
     UnitOfPressure,
+    UnitOfSpeed,
+    UnitOfTemperature,
+    UnitOfTime,
+    UnitOfVolume,
 )
+from homeassistant.core import HassJob, HomeAssistant, callback
+from homeassistant.helpers import entity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .coordinator import victronEnergyDeviceUpdateCoordinator
 from .base import VictronBaseEntityDescription
 from .const import (
-    DOMAIN,
-    register_info_dict,
     CONF_ADVANCED_OPTIONS,
+    DOMAIN,
+    BoolReadEntityType,
     ReadEntityType,
     TextReadEntityType,
-    BoolReadEntityType,
+    register_info_dict,
 )
+from .coordinator import victronEnergyDeviceUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -59,30 +57,31 @@ async def async_setup_entry(
     descriptions = []
     # TODO cleanup
     register_set = victron_coordinator.processed_data()["register_set"]
-    for slave, registerLedger in register_set.items():
-        for name in registerLedger:
-            for register_name, registerInfo in register_info_dict[name].items():
+    for slave, register_ledger in register_set.items():
+        for name in register_ledger:
+            for register_name, register_info in register_info_dict[name].items():
                 _LOGGER.debug(
-                    "unit == $s register_ledger == %s registerInfo",
-                    {str(slave), str(registerLedger)},
+                    "unit == %s register_ledger == %s register_info",
+                    str(slave),
+                    str(register_ledger),
                 )
                 if config_entry.options[CONF_ADVANCED_OPTIONS]:
                     if not isinstance(
-                        registerInfo.entityType, ReadEntityType
-                    ) or isinstance(registerInfo.entityType, BoolReadEntityType):
+                        register_info.entityType, ReadEntityType
+                    ) or isinstance(register_info.entityType, BoolReadEntityType):
                         continue
 
                 description = VictronEntityDescription(
                     key=register_name,
                     name=register_name.replace("_", " "),
-                    native_unit_of_measurement=registerInfo.unit,
-                    state_class=registerInfo.determine_stateclass(),
+                    native_unit_of_measurement=register_info.unit,
+                    state_class=register_info.determine_stateclass(),
                     slave=slave,
                     device_class=determine_victron_device_class(
-                        register_name, registerInfo.unit
+                        register_name, register_info.unit
                     ),
-                    entity_type=registerInfo.entityType
-                    if isinstance(registerInfo.entityType, TextReadEntityType)
+                    entity_type=register_info.entityType
+                    if isinstance(register_info.entityType, TextReadEntityType)
                     else None,
                 )
                 _LOGGER.debug("composed description == %s", {str(description)})
@@ -102,32 +101,32 @@ async def async_setup_entry(
 def determine_victron_device_class(name, unit):
     if unit == PERCENTAGE and "soc" in name:
         return SensorDeviceClass.BATTERY
-    elif unit == PERCENTAGE:
+    if unit == PERCENTAGE:
         return None  # Device classes aren't supported for voltage deviation and other % based entities that do not report SOC, moisture or humidity
-    elif unit in [member.value for member in UnitOfPower]:
+    if unit in [member.value for member in UnitOfPower]:
         return SensorDeviceClass.POWER
-    elif unit in [member.value for member in UnitOfEnergy]:
+    if unit in [member.value for member in UnitOfEnergy]:
         _LOGGER.debug("unit of energy")
         return SensorDeviceClass.ENERGY
-    elif unit == UnitOfFrequency.HERTZ:
+    if unit == UnitOfFrequency.HERTZ:
         return SensorDeviceClass.FREQUENCY
-    elif unit == UnitOfTime.SECONDS:
+    if unit == UnitOfTime.SECONDS:
         return SensorDeviceClass.DURATION
-    elif unit in [member.value for member in UnitOfTemperature]:
+    if unit in [member.value for member in UnitOfTemperature]:
         return SensorDeviceClass.TEMPERATURE
-    elif unit in [member.value for member in UnitOfVolume]:
+    if unit in [member.value for member in UnitOfVolume]:
         return (
             SensorDeviceClass.VOLUME_STORAGE
         )  # Perhaps change this to water if only water is measured in volume units
-    elif unit in [member.value for member in UnitOfSpeed]:
+    if unit in [member.value for member in UnitOfSpeed]:
         if "meteo" in name:
             return SensorDeviceClass.WIND_SPEED
         return SensorDeviceClass.SPEED
-    elif unit in [member.value for member in UnitOfPressure]:
+    if unit in [member.value for member in UnitOfPressure]:
         return SensorDeviceClass.PRESSURE
-    elif unit == UnitOfElectricPotential.VOLT:
+    if unit == UnitOfElectricPotential.VOLT:
         return SensorDeviceClass.VOLTAGE
-    elif unit == UnitOfElectricCurrent.AMPERE:
+    if unit == UnitOfElectricCurrent.AMPERE:
         return SensorDeviceClass.CURRENT
     return None
 
@@ -211,8 +210,8 @@ class VictronSensor(CoordinatorEntity, SensorEntity):
     def device_info(self) -> entity.DeviceInfo:
         """Return the device info."""
         return entity.DeviceInfo(
-            identifiers={(DOMAIN, self.unique_id.split("_")[0])},
+            identifiers={(DOMAIN, self.unique_id.split("_", maxsplit=1)[0])},
             name=self.unique_id.split("_")[1],
-            model=self.unique_id.split("_")[0],
+            model=self.unique_id.split("_", maxsplit=1)[0],
             manufacturer="victron",  # to be dynamically set for gavazzi and redflow
         )

@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import logging
-
-from .hub import VictronHub
-
 from collections import OrderedDict
 
+import pymodbus
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-
-import pymodbus
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
+
+from .hub import VictronHub
 
 if "3.7.0" <= pymodbus.__version__ <= "3.7.4":
     from pymodbus.pdu.register_read_message import ReadHoldingRegistersResponse
@@ -22,11 +20,11 @@ from datetime import timedelta
 
 from .const import (
     DOMAIN,
-    UINT16,
-    UINT32,
     INT16,
     INT32,
     STRING,
+    UINT16,
+    UINT32,
     RegisterInfo,
     register_info_dict,
 )
@@ -151,17 +149,17 @@ class victronEnergyDeviceUpdateCoordinator(DataUpdateCoordinator):
     def decode_scaling(self, number, scale, unit):
         if unit == "" and scale == 1:
             return round(number)
-        else:
-            return number / scale
+
+        return number / scale
 
     def encode_scaling(self, value, unit, scale):
         if scale == 0:
             return value
-        else:
-            if unit == "" and scale == 1:
-                return int(round(value))
-            else:
-                return int(value * scale)
+
+        if unit == "" and scale == 1:
+            return int(round(value))
+
+        return int(value * scale)
 
     def get_data(self):
         return self.data
